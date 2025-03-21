@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centria Campus Navigator</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* App container */
+        .app-container {
+            background-color: white;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none;
+        }
+        
+        /* Main content area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Home screen styles */
+        .home-screen {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .search-container {
+            padding: 16px;
+            background-color: white;
+            z-index: 10;
+        }
+        
+        .search-bar {
+            display: flex;
+            background-color: #f1f1f1;
+            border-radius: 24px;
+            padding: 8px 16px;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-icon {
+            color: #666;
+            margin-right: 8px;
+        }
+        
+        /* Map container */
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Floor selector */
+        .floor-selector {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            border-radius: 8px;
+            padding: 8px 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            z-index: 5;
+        }
+        
+        .floor-button {
+            background: none;
+            border: none;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .floor-button.active {
+            background-color: #0056b3;
+            color: white;
+        }
+        
+        /* Bottom navigation */
+        .bottom-nav {
+            display: flex;
+            background-color: white;
+            padding: 12px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+            color: #666;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .nav-item.active {
+            color: #0056b3;
+        }
+        
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item span {
+            font-size: 0.8rem;
+        }
+        
+        /* Search results page */
+        .search-results {
+            display: none;
+            padding: 16px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .results-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .result-item {
+            background-color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-item:active {
+            transform: scale(0.98);
+        }
+        
+        .result-icon {
+            background-color: #e6f2ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #0056b3;
+        }
+        
+        .result-details {
+            flex: 1;
+        }
+        
+        .result-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .result-location {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .result-arrow {
+            color: #999;
+        }
+        
+        /* Navigation page */
+        .navigation-page {
+            display: none;
+            height: 100%;
+            position: relative;
+        }
+        
+        .route-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 20px;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .route-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .route-title {
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .route-time {
+            background-color: #e6f2ff;
+            color: #0056b3;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .route-details {
+            margin-bottom: 20px;
+        }
+        
+        .route-step {
+            display: flex;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .step-number {
+            background-color: #0056b3;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-instructions {
+            padding-bottom: 16px;
+            flex: 1;
+        }
+        
+        .route-step:not(:last-child) .step-instructions {
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Profile/Settings page */
+        .settings-page {
+            display: none;
+            padding: 16px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .settings-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .settings-header {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .settings-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        
+        .option-icon {
+            margin-right: 12px;
+            color: #0056b3;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .option-label {
+            flex: 1;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #0056b3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Animation for page transitions */
+        @keyframes slidein {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideout {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        
+        .page-active {
+            display: block;
+            animation: slidein 0.3s forwards;
+        }
+        
+        /* Loading indicator */
+        .loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0056b3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Custom markers for rooms */
+        .room-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(0, 86, 179, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .room-marker:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        /* Room info popup */
+        .room-popup {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: none;
+            z-index: 20;
+        }
+        
+        .room-popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .room-popup-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+        
+        .close-popup {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        .room-popup-details {
+            margin-bottom: 16px;
+        }
+        
+        .room-popup-detail {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-icon {
+            color: #0056b3;
+            margin-right: 12px;
+            width: 16px;
+            text-align: center;
+        }
+        
+        .navigate-button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .navigate-button:active {
+            background-color: #004494;
+        }
+        
+        /* Zoom controls */
+        .zoom-controls {
+            position: absolute;
+            left: 16px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .zoom-button {
+            background: none;
+            border: none;
+            padding: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #333;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .zoom-button:first-child {
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Route path */
+        .route-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" id="backButton">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1>Centria Campus Navigator</h1>
+        </div>
+        
+        <!-- Main content area -->
+        <div class="content">
+            <!-- Home Screen -->
+            <div class="home-screen" id="homeScreen">
+                <div class="search-container">
+                    <div class="search-bar">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" placeholder="Search for a room or person..." id="searchInput">
+                    </div>
+                </div>
+                
+                <div class="map-container" id="mapContainer">
+                    <!-- Map placeholder - replace with actual floor plans -->
+                    <img src="placeholder-ground-floor.jpg" alt="Campus Map" class="map-image" id="mapImage">
+                    
+                    <!-- Floor selector -->
+                    <div class="floor-selector">
+                        <button class="floor-button" data-floor="2">2</button>
+                        <button class="floor-button" data-floor="1">1</button>
+                        <button class="floor-button active" data-floor="0">G</button>
+                    </div>
+                    
+                    <!-- Zoom controls -->
+                    <div class="zoom-controls">
+                        <button class="zoom-button" id="zoomIn"><i class="fas fa-plus"></i></button>
+                        <button class="zoom-button" id="zoomOut"><i class="fas fa-minus"></i></button>
+                    </div>
+                    
+                    <!-- Room markers will be added dynamically -->
+                    <!-- Example: -->
+                    <div class="room-marker" style="top: 30%; left: 40%;">A1</div>
+                    <div class="room-marker" style="top: 45%; left: 60%;">B2</div>
+                    <div class="room-marker" style="top: 60%; left: 35%;">C3</div>
+                    
+                    <!-- Room info popup -->
+                    <div class="room-popup" id="roomPopup">
+                        <div class="room-popup-header">
+                            <div class="room-popup-title">Room A101</div>
+                            <button class="close-popup" id="closePopup">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="room-popup-details">
+                            <div class="room-popup-detail">
+                                <i class="fas fa-map-marker-alt detail-icon"></i>
+                                <div>Ground Floor, Building A</div>
+                            </div>
+                            <div class="room-popup-detail">
+                                <i class="fas fa-door-open detail-icon"></i>
+                                <div>Classroom</div>
+                            </div>
+                            <div class="room-popup-detail">
+                                <i class="fas fa-users detail-icon"></i>
+                                <div>Capacity: 30 people</div>
+                            </div>
+                        </div>
+                        <button class="navigate-button" id="navigateToRoom">
+                            Navigate Here
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search Results Page -->
+            <div class="search-results" id="searchResults">
+                <div class="results-header">Search Results</div>
+                <!-- Results will be dynamically added here -->
+                <div class="result-item">
+                    <div class="result-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-name">Room A101</div>
+                        <div class="result-location">Ground Floor, Building A</div>
+                    </div>
+                    <div class="result-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-name">Room B205</div>
+                        <div class="result-location">2nd Floor, Building B</div>
+                    </div>
+                    <div class="result-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-icon">
+                        <i class="fas fa-coffee"></i>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-name">Cafeteria</div>
+                        <div class="result-location">Ground Floor, Main Building</div>
+                    </div>
+                    <div class="result-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="result-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="result-details">
+                        <div class="result-name">Library</div>
+                        <div class="result-location">1st Floor, Building C</div>
+                    </div>
+                    <div class="result-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Page -->
+            <div class="navigation-page" id="navigationPage">
+                <!-- Map with route -->
+                <div class="map-container">
+                    <img src="placeholder-ground-floor.jpg" alt="Navigation Map" class="map-image">
+                    <!-- SVG overlay for the route path -->
+                    <svg class="route-path">
+                        <path d="M100,150 C120,130 150,120 200,100 S250,50 300,80" 
+                              stroke="#0056b3" stroke-width="5" fill="none" 
+                              stroke-dasharray="8 4" />
+                        <!-- Start point -->
+                        <circle cx="100" cy="150" r="8" fill="#4CAF50" />
+                        <!-- End point -->
+                        <circle cx="300" cy="80" r="8" fill="#F44336" />
+                    </svg>
+                </div>
+                
+                <!-- Route information panel -->
+                <div class="route-info">
+                    <div class="route-header">
+                        <div class="route-title">Route to Room B205</div>
+                        <div class="route-time">3 min</div>
+                    </div>
+                    
+                    <div class="route-details">
+                        <div class="route-step">
+                            <div class="step-number">1</div>
+                            <div class="step-instructions">
+                                Go straight through the main hallway for 20 meters
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">2</div>
+                            <div class="step-instructions">
+                                Turn right at the water fountain
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">3</div>
+                            <div class="step-instructions">
+                                Take the stairs to the 2nd floor
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-number">4</div>
+                            <div class="step-instructions">
+                                Room B205 will be on your left, 10 meters from the stairs
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings/Profile Page -->
+            <div class="settings-page" id="settingsPage">
+                <div class="settings-section">
+                    <div class="settings-header">App Settings</div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="option-label">Notifications</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <div class="option-label">Dark Mode</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-wheelchair"></i>
+                        </div>
+                        <div class="option-label">Accessibility Mode</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="settings-header">Navigation Preferences</div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <div class="option-label">Fastest Route</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-elevator"></i>
+                        </div>
+                        <div class="option-label">Prefer Elevators</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="settings-header">About</div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        <div class="option-label">App Version</div>
+                        <div>1.0.0</div>
+                    </div>
+                    
+                    <div class="settings-option">
+                        <div class="option-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="option-label">Contact Support</div>
+                        <i class="fas fa-chevron-right" style="color: #999;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="homeScreen">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Map</span>
+            </div>
+            <div class="nav-item" data-page="searchResults">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </div>
+            <div class="nav-item" data-page="navigationPage">
+                <i class="fas fa-directions"></i>
+                <span>Navigate</span>
+            </div>
+            <div class="nav-item" data-page="settingsPage">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+        
+        <!-- Loading indicator -->
+        <div class="loading-indicator">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for the Campus Navigation App prototype
+        document.addEventListener('DOMContentLoaded', function() {
+            // References to DOM elements
+            const searchInput = document.getElementById('searchInput');
+            const mapImage = document.getElementById('mapImage');
+            const backButton = document.getElementById('backButton');
+            const floorButtons = document.querySelectorAll('.floor-button');
+            const navItems = document.querySelectorAll('.nav-item');
+            const resultItems = document.querySelectorAll('.result-item');
+            const roomMarkers = document.querySelectorAll('.room-marker');
+            const roomPopup = document.getElementById('roomPopup');
+            const closePopup = document.getElementById('closePopup');
+            const navigateToRoom = document.getElementById('navigateToRoom');
+            const zoomIn = document.getElementById('zoomIn');
+            const zoomOut = document.getElementById('zoomOut');
+            
+            // All pages
+            const pages = {
+                homeScreen: document.getElementById('homeScreen'),
+                searchResults: document.getElementById('searchResults'),
+                navigationPage: document.getElementById('navigationPage'),
+                settingsPage: document.getElementById('settingsPage')
+            };
+            
+            // Current page tracking
+            let currentPage = 'homeScreen';
+            
+            // Floor map images (placeholders)
+            const floorMaps = {
+                0: 'placeholder-ground-floor.jpg',
+                1: 'placeholder-first-floor.jpg',
+                2: 'placeholder-second-floor.jpg'
+            };
+            
+            // Current zoom level
+            let zoomLevel = 1;
+            let panX = 0;
+            let panY = 0;
+            
+            // Room data (would typically come from an API/database)
+            const rooms = [
+                { id: 'A101', name: 'Room A101', floor: 0, building: 'A', type: 'Classroom', capacity: 30, x: 40, y: 30 },
+                { id: 'B205', name: 'Room B205', floor: 1, building: 'B', type: 'Laboratory', capacity: 20, x: 60, y: 45 },
+                { id: 'C310', name: 'Room C310', floor: 2, building: 'C', type: 'Office', capacity: 5, x: 35, y: 60 },
+                { id: 'CAFE', name: 'Cafeteria', floor: 0, building: 'Main', type: 'Dining', capacity: 100, x: 50, y: 70 },
+                { id: 'LIB', name: 'Library', floor: 1, building: 'C', type: 'Study', capacity: 50, x: 25, y: 40 }
+            ];
+            
+            // Event Listeners
+            
+            // Bottom navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-page');
+                    changePage(targetPage);
+                });
+            });
+            
+            // Floor selection
+            floorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const floor = this.getAttribute('data-floor');
+                    changeFloor(floor);
+                    
+                    // Update active state
+                    floorButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Search input focus
+            searchInput.addEventListener('focus', function() {
+                changePage('searchResults');
+            });
+            
+            // Back button
+            backButton.addEventListener('click', function() {
+                changePage('homeScreen');
+            });
+            
+            // Result item click
+            resultItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Simulate selecting a room for navigation
+                    changePage('navigationPage');
+                });
+            });
+            
+            // Room markers
+            roomMarkers.forEach(marker => {
+                marker.addEventListener('click', function() {
+                    showRoomPopup();
+                });
+            });
+            
+            // Close room popup
+            closePopup.addEventListener('click', function() {
+                roomPopup.style.display = 'none';
+            });
+            
+            // Navigate to room
+            navigateToRoom.addEventListener('click', function() {
+                roomPopup.style.display = 'none';
+                changePage('navigationPage');
+            });
+            
+            // Zoom controls
+            zoomIn.addEventListener('click', function() {
+                zoomMap(0.2);
+            });
+            
+            zoomOut.addEventListener('click', function() {
+                zoomMap(-0.2);
+            });
+            
+            // Map dragging
+            let isDragging = false;
+            let startX, startY;
+            let initialPanX, initialPanY;
+            
+            mapImage.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                initialPanX = panX;
+                initialPanY = panY;
+                mapImage.style.cursor = 'grabbing';
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                
+                panX = initialPanX + dx;
+                panY = initialPanY + dy;
+                
+                updateMapTransform();
+            });
+            
+            document.addEventListener('mouseup', function() {
+                isDragging = false;
+                mapImage.style.cursor = 'grab';
+            });
+            
+            // Touch events for mobile
+            mapImage.addEventListener('touchstart', function(e) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                initialPanX = panX;
+                initialPanY = panY;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (!isDragging) return;
+                
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                
+                panX = initialPanX + dx;
+                panY = initialPanY + dy;
+                
+                updateMapTransform();
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchend', function() {
+                isDragging = false;
+            });
+            
+            // Functions
+            
+            // Change current page
+            function changePage(newPage) {
+                // Hide all pages
+                for (const page in pages) {
+                    pages[page].style.display = 'none';
+                }
+                
+                // Show the selected page
+                pages[newPage].style.display = 'block';
+                pages[newPage].classList.add('page-active');
+                
+                // Update bottom nav
+                navItems.forEach(item => {
+                    if (item.getAttribute('data-page') === newPage) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Show/hide back button
+                if (newPage === 'homeScreen') {
+                    backButton.style.display = 'none';
+                } else {
+                    backButton.style.display = 'block';
+                }
+                
+                currentPage = newPage;
+            }
+            
+            // Change floor map
+            function changeFloor(floor) {
+                // Update the map image
+                mapImage.src = floorMaps[floor];
+                
+                // Reset zoom and pan
+                zoomLevel = 1;
+                panX = 0;
+                panY = 0;
+                updateMapTransform();
+                
+                // TODO: Update visible room markers based on floor
+                
+                // Close any open popups
+                roomPopup.style.display = 'none';
+            }
+            
+            // Show room information popup
+            function showRoomPopup() {
+                roomPopup.style.display = 'block';
+            }
+            
+            // Zoom the map
+            function zoomMap(delta) {
+                const newZoom = zoomLevel + delta;
+                // Limit zoom levels
+                if (newZoom >= 0.5 && newZoom <= 3) {
+                    zoomLevel = newZoom;
+                    updateMapTransform();
+                }
+            }
+            
+            // Update map transform
+            function updateMapTransform() {
+                mapImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomLevel})`;
+            }
+            
+            // Simulate search functionality
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                
+                // If on home screen and typing, switch to search results
+                if (currentPage === 'homeScreen' && query.length > 0) {
+                    changePage('searchResults');
+                }
+                
+                // TODO: Filter result items based on query
+            });
+            
+            // Initialize the app
+            function initApp() {
+                // Set initial page
+                changePage('homeScreen');
+                
+                // Set initial floor
+                changeFloor(0);
+                
+                // Initialize map for touch/mouse interactions
+                mapImage.style.cursor = 'grab';
+            }
+            
+            // Start the app
+            initApp();
+        });
+    </script>
+</body>
+</html>
