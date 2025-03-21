@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centria Campus Navigator - All Screens</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 2rem;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #0056b3;
+        }
+
+        h2 {
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+            color: #0056b3;
+        }
+        
+        .screens-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+            gap: 2rem;
+            justify-content: center;
+        }
+        
+        .screen {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            width: 100%;
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .screen-title {
+            background-color: #0056b3;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .screen-content {
+            height: 650px;
+            border: none;
+            width: 100%;
+        }
+
+        .description {
+            padding: 1rem;
+            background-color: #f5f5f5;
+            border-top: 1px solid #eee;
+        }
+
+        .description h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .description p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        /* Individual screen styles */
+
+        /* Home Screen */
+        .home-screen {
+            background-color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #0056b3;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .search-container {
+            padding: 16px;
+            background-color: white;
+        }
+        
+        .search-bar {
+            display: flex;
+            background-color: #f1f1f1;
+            border-radius: 24px;
+            padding: 8px 16px;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .search-icon {
+            color: #666;
+            margin-right: 8px;
+        }
+        
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: #e9ecef; /* Placeholder background */
+        }
+        
+        .map-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .floor-selector {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: white;
+            border-radius: 8px;
+            padding: 8px 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .floor-button {
+            background: none;
+            border: none;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .floor-button.active {
+            background-color: #0056b3;
+            color: white;
+        }
+        
+        .zoom-controls {
+            position: absolute;
+            left: 16px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .zoom-button {
+            background: none;
+            border: none;
+            padding: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #333;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .room-marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(0, 86, 179, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .bottom-nav {
+            display: flex;
+            background-color: white;
+            padding: 12px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0;
+            color: #666;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            color: #0056b3;
+        }
+        
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item span {
+            font-size: 0.8rem;
+        }
+        
+        /* Search Results */
+        .search-results {
+            padding: 16px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .results-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .result-item {
+            background-color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-icon {
+            background-color: #e6f2ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: #0056b3;
+        }
+        
+        .result-details {
+            flex: 1;
+        }
+        
+        .result-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .result-location {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .result-arrow {
+            color: #999;
+        }
+        
+        /* Room Info */
+        .room-info {
+            padding: 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .room-popup {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-top: 20px;
+        }
+        
+        .room-popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .room-popup-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            flex: 1;
+        }
+        
+        .room-popup-details {
+            margin-bottom: 16px;
+        }
+        
+        .room-popup-detail {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-icon {
+            color: #0056b3;
+            margin-right: 12px;
+            width: 16px;
+            text-align: center;
+        }
+        
+        .navigate-button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        /* Navigation */
+        .navigation-page {
+            height: 100%;
+            position: relative;
+        }
+        
+        .route-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .route-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 20px;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .route-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .route-title {
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .route-time {
+            background-color: #e6f2ff;
+            color: #0056b3;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .route-details {
+            margin-bottom: 20px;
+        }
+        
+        .route-step {
+            display: flex;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .step-number {
+            background-color: #0056b3;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-instructions {
+            padding-bottom: 16px;
+            flex: 1;
+        }
+        
+        .route-step:not(:last-child) .step-instructions {
+            border-bottom: 1px solid #eee;
+        }
+        
+        /* Settings */
+        .settings-page {
+            padding: 16px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .settings-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .settings-header {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .settings-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+        
+        .option-icon {
+            margin-right: 12px;
+            color: #0056b3;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .option-label {
+            flex: 1;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #0056b3;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+    <!-- Font Awesome for icons via SVG to avoid external dependencies -->
+    <style>
+        .fa-search:before { content: "🔍"; }
+        .fa-map-marked-alt:before { content: "🗺️"; }
+        .fa-search:before { content: "🔍"; }
+        .fa-directions:before { content: "🧭"; }
+        .fa-cog:before { content: "⚙️"; }
+        .fa-arrow-left:before { content: "←"; }
+        .fa-door-open:before { content: "🚪"; }
+        .fa-coffee:before { content: "☕"; }
+        .fa-book:before { content: "📚"; }
+        .fa-chevron-right:before { content: "›"; }
+        .fa-map-marker-alt:before { content: "📍"; }
+        .fa-users:before { content: "👥"; }
+        .fa-times:before { content: "✖"; }
+        .fa-plus:before { content: "+"; }
+        .fa-minus:before { content: "-"; }
+        .fa-calendar-alt:before { content: "📅"; }
+        .fa-laptop:before { content: "💻"; }
+        .fa-bell:before { content: "🔔"; }
+        .fa-moon:before { content: "🌙"; }
+        .fa-wheelchair:before { content: "♿"; }
+        .fa-tachometer-alt:before { content: "🔄"; }
+        .fa-elevator:before { content: "🔼"; }
+        .fa-info-circle:before { content: "ℹ️"; }
+        .fa-envelope:before { content: "✉️"; }
+    </style>
+</head>
+<body>
+    <h1>Centria Campus Navigator - All Screens</h1>
+    <p style="text-align: center; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+        This showcase displays all interface screens for the Centria Campus Navigator mobile app prototype. 
+        Each screen is shown separately to facilitate design work in Figma using the html.to.design plugin.
+    </p>
+
+    <h2>Main Screens</h2>
+    <div class="screens-container">
+        <!-- Home Screen -->
+        <div class="screen">
+            <div class="screen-title">Home Screen</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search for a room or person...">
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <div style="width: 100%; height: 100%; background-color: #c8d4e3; display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+                                <div style="font-weight: bold;">Ground Floor Map</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floor selector -->
+                        <div class="floor-selector">
+                            <button class="floor-button" data-floor="2">2</button>
+                            <button class="floor-button" data-floor="1">1</button>
+                            <button class="floor-button active" data-floor="0">G</button>
+                        </div>
+                        
+                        <!-- Zoom controls -->
+                        <div class="zoom-controls">
+                            <button class="zoom-button"><i class="fas fa-plus"></i></button>
+                            <button class="zoom-button"><i class="fas fa-minus"></i></button>
+                        </div>
+                        
+                        <!-- Room markers -->
+                        <div class="room-marker" style="top: 30%; left: 40%;">A1</div>
+                        <div class="room-marker" style="top: 45%; left: 60%;">B2</div>
+                        <div class="room-marker" style="top: 60%; left: 35%;">C3</div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item active">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Home Screen</h3>
+                <p>The main screen featuring an interactive map with floor selector, room markers, and search functionality.</p>
+            </div>
+        </div>
+
+        <!-- Search Results Screen -->
+        <div class="screen">
+            <div class="screen-title">Search Results</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <button class="back-button" style="position: absolute; left: 16px; top: 16px; background: none; border: none; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search for a room or person..." value="Room">
+                        </div>
+                    </div>
+                    <div class="search-results">
+                        <div class="results-header">Search Results</div>
+                        
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <div class="result-details">
+                                <div class="result-name">Room A101</div>
+                                <div class="result-location">Ground Floor, Building A</div>
+                            </div>
+                            <div class="result-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-door-open"></i>
+                            </div>
+                            <div class="result-details">
+                                <div class="result-name">Room B205</div>
+                                <div class="result-location">2nd Floor, Building B</div>
+                            </div>
+                            <div class="result-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-coffee"></i>
+                            </div>
+                            <div class="result-details">
+                                <div class="result-name">Cafeteria</div>
+                                <div class="result-location">Ground Floor, Main Building</div>
+                            </div>
+                            <div class="result-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="result-item">
+                            <div class="result-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="result-details">
+                                <div class="result-name">Library</div>
+                                <div class="result-location">1st Floor, Building C</div>
+                            </div>
+                            <div class="result-arrow">
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item active">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Search Results</h3>
+                <p>Displays search results with categorized listings of rooms and facilities across the campus.</p>
+            </div>
+        </div>
+
+        <!-- Room Details Screen -->
+        <div class="screen">
+            <div class="screen-title">Room Details</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <button class="back-button" style="position: absolute; left: 16px; top: 16px; background: none; border: none; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="room-info">
+                        <div class="map-container" style="height: 250px;">
+                            <div style="width: 100%; height: 100%; background-color: #c8d4e3; display: flex; align-items: center; justify-content: center;">
+                                <div style="text-align: center; padding: 20px;">
+                                    <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+                                    <div style="font-weight: bold;">Room Location</div>
+                                </div>
+                            </div>
+                            <div class="room-marker" style="top: 45%; left: 40%;">A1</div>
+                        </div>
+                        
+                        <div class="room-popup">
+                            <div class="room-popup-header">
+                                <div class="room-popup-title">Room A101</div>
+                            </div>
+                            <div class="room-popup-details">
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-map-marker-alt detail-icon"></i>
+                                    <div>Ground Floor, Building A</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-door-open detail-icon"></i>
+                                    <div>Classroom</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-users detail-icon"></i>
+                                    <div>Capacity: 30 people</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-calendar-alt detail-icon"></i>
+                                    <div>Available: 2:00 PM - 6:00 PM</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-laptop detail-icon"></i>
+                                    <div>Facilities: Projector, Whiteboard</div>
+                                </div>
+                            </div>
+                            <button class="navigate-button">
+                                Navigate to This Room
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item active">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Room Details</h3>
+                <p>Provides detailed information about a selected room, including location, type, capacity, and available facilities.</p>
+            </div>
+        </div>
+
+        <!-- Navigation Screen -->
+        <div class="screen">
+            <div class="screen-title">Navigation</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <button class="back-button" style="position: absolute; left: 16px; top: 16px; background: none; border: none; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="navigation-page">
+                        <div class="map-container">
+                            <div style="width: 100%; height: 100%; background-color: #c8d4e3; display: flex; align-items: center; justify-content: center;">
+                                <div style="text-align: center; padding: 20px;">
+                                    <div style="font-size: 36px; margin-bottom: 10px;">🧭</div>
+                                    <div style="font-weight: bold;">Navigation Map</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Route line drawn with HTML -->
+                            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+                                <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                                    <path d="M100,150 C120,130 150,120 200,100 S250,50 300,80" 
+                                        stroke="#0056b3" stroke-width="5" fill="none" 
+                                        stroke-dasharray="8 4" />
+                                    <!-- Start point -->
+                                    <circle cx="100" cy="150" r="8" fill="#4CAF50" />
+                                    <!-- End point -->
+                                    <circle cx="300" cy="80" r="8" fill="#F44336" />
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Route information panel -->
+                        <div class="route-info">
+                            <div class="route-header">
+                                <div class="route-title">Route to Room B205</div>
+                                <div class="route-time">3 min</div>
+                            </div>
+                            
+                            <div class="route-details">
+                                <div class="route-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-instructions">
+                                        Go straight through the main hallway for 20 meters
+                                    </div>
+                                </div>
+                                <div class="route-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-instructions">
+                                        Turn right at the water fountain
+                                    </div>
+                                </div>
+                                <div class="route-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-instructions">
+                                        Take the stairs to the 2nd floor
+                                    </div>
+                                </div>
+                                <div class="route-step">
+                                    <div class="step-number">4</div>
+                                    <div class="step-instructions">
+                                        Room B205 will be on your left, 10 meters from the stairs
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item active">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Navigation Screen</h3>
+                <p>Provides turn-by-turn directions from the current location to a selected destination with estimated arrival time.</p>
+            </div>
+        </div>
+
+        <!-- Floor Selection -->
+        <div class="screen">
+            <div class="screen-title">Floor Selection</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search for a room or person...">
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <div style="width: 100%; height: 100%; background-color: #d1dbed; display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+                                <div style="font-weight: bold;">First Floor Map</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floor selector highlighted -->
+                        <div class="floor-selector" style="box-shadow: 0 0 10px 3px rgba(0,86,179,0.5);">
+                            <button class="floor-button" data-floor="2">2</button>
+                            <button class="floor-button active" data-floor="1" style="background-color: #0056b3; color: white;">1</button>
+                            <button class="floor-button" data-floor="0">G</button>
+                        </div>
+                        
+                        <!-- Zoom controls -->
+                        <div class="zoom-controls">
+                            <button class="zoom-button"><i class="fas fa-plus"></i></button>
+                            <button class="zoom-button"><i class="fas fa-minus"></i></button>
+                        </div>
+                        
+                        <!-- Room markers -->
+                        <div class="room-marker" style="top: 25%; left: 35%;">D1</div>
+                        <div class="room-marker" style="top: 40%; left: 65%;">E2</div>
+                        <div class="room-marker" style="top: 65%; left: 45%;">F3</div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item active">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Floor Selection</h3>
+                <p>Shows the first floor map with the floor selector highlighted, allowing easy navigation between different floors.</p>
+            </div>
+        </div>
+
+        <!-- Settings Screen -->
+        <div class="screen">
+            <div class="screen-title">Settings</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <button class="back-button" style="position: absolute; left: 16px; top: 16px; background: none; border: none; color: white; font-size: 1.2rem;">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="settings-page">
+                        <div class="settings-section">
+                            <div class="settings-header">App Settings</div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div class="option-label">Notifications</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-moon"></i>
+                                </div>
+                                <div class="option-label">Dark Mode</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-wheelchair"></i>
+                                </div>
+                                <div class="option-label">Accessibility Mode</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <div class="settings-header">Navigation Preferences</div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                </div>
+                                <div class="option-label">Fastest Route</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-elevator"></i>
+                                </div>
+                                <div class="option-label">Prefer Elevators</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <div class="settings-header">About</div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="option-label">App Version</div>
+                                <div>1.0.0</div>
+                            </div>
+                            
+                            <div class="settings-option">
+                                <div class="option-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="option-label">Contact Support</div>
+                                <i class="fas fa-chevron-right" style="color: #999;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item active">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Settings Screen</h3>
+                <p>Allows users to customize app behavior, including appearance, notifications, accessibility, and navigation preferences.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Additional UI Elements</h2>
+    <div class="screens-container">
+        <!-- Room Popup -->
+        <div class="screen">
+            <div class="screen-title">Room Popup</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="map-container">
+                        <div style="width: 100%; height: 100%; background-color: #c8d4e3; display: flex; align-items: center; justify-content: center; opacity: 0.7;">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+                                <div style="font-weight: bold;">Ground Floor Map</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Room markers -->
+                        <div class="room-marker" style="top: 30%; left: 40%; transform: scale(1.2); box-shadow: 0 0 10px 2px rgba(0,86,179,0.5);">A1</div>
+                        
+                        <!-- Room info popup -->
+                        <div class="room-popup" style="display: block; z-index: 20; position: absolute; bottom: 20px; left: 20px; right: 20px;">
+                            <div class="room-popup-header">
+                                <div class="room-popup-title">Room A101</div>
+                                <button class="close-popup" style="background: none; border: none; color: #999; font-size: 1.2rem;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="room-popup-details">
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-map-marker-alt detail-icon"></i>
+                                    <div>Ground Floor, Building A</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-door-open detail-icon"></i>
+                                    <div>Classroom</div>
+                                </div>
+                                <div class="room-popup-detail">
+                                    <i class="fas fa-users detail-icon"></i>
+                                    <div>Capacity: 30 people</div>
+                                </div>
+                            </div>
+                            <button class="navigate-button">
+                                Navigate Here
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item active">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Room Information Popup</h3>
+                <p>Appears when a room marker is tapped, displaying information about the room and offering navigation options.</p>
+            </div>
+        </div>
+        
+        <!-- Second Floor View -->
+        <div class="screen">
+            <div class="screen-title">Second Floor</div>
+            <div class="screen-content">
+                <div class="home-screen">
+                    <div class="header">
+                        <h1>Centria Campus Navigator</h1>
+                    </div>
+                    <div class="search-container">
+                        <div class="search-bar">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="Search for a room or person...">
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <div style="width: 100%; height: 100%; background-color: #b6c8df; display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; padding: 20px;">
+                                <div style="font-size: 36px; margin-bottom: 10px;">🏢</div>
+                                <div style="font-weight: bold;">Second Floor Map</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Floor selector -->
+                        <div class="floor-selector">
+                            <button class="floor-button active" data-floor="2" style="background-color: #0056b3; color: white;">2</button>
+                            <button class="floor-button" data-floor="1">1</button>
+                            <button class="floor-button" data-floor="0">G</button>
+                        </div>
+                        
+                        <!-- Zoom controls -->
+                        <div class="zoom-controls">
+                            <button class="zoom-button"><i class="fas fa-plus"></i></button>
+                            <button class="zoom-button"><i class="fas fa-minus"></i></button>
+                        </div>
+                        
+                        <!-- Room markers -->
+                        <div class="room-marker" style="top: 20%; left: 30%;">G1</div>
+                        <div class="room-marker" style="top: 35%; left: 55%;">H2</div>
+                        <div class="room-marker" style="top: 70%; left: 40%;">I3</div>
+                    </div>
+                    
+                    <div class="bottom-nav">
+                        <div class="nav-item active">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Map</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-search"></i>
+                            <span>Search</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-directions"></i>
+                            <span>Navigate</span>
+                        </div>
+                        <div class="nav-item">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="description">
+                <h3>Second Floor View</h3>
+                <p>Shows the second floor map with corresponding room markers, demonstrating the floor switching capability.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
